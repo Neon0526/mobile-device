@@ -1,17 +1,64 @@
 import React from 'react';
+
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {createMuiTheme, ThemeProvider} from '@mui/material';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+// import './index.css';
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
+// import App from './App';
+
+import Main from './ui/Main.js';
+import VendorList from './vendor/VendorList';
+import Product from './product/Product';
+const theme = createMuiTheme({
+
+    palette: {
+
+        primary: {
+
+            main: '#f44336'
+
+        },
+
+        secondary: {
+
+            main: '#F5B7B1'
+
+        },
+        third: {
+            main: '#f47336'
+        }
+
+    }
+
+});
+
+
+ReactDOM.render (<ThemeProvider theme={theme}>
+
+
+    <React.StrictMode>
+
+        <Router>
+
+            <Switch>
+
+                <Route path="/vendor"
+                    component={VendorList}/>
+
+                <Route path="/Product"
+                    component={Product}/>
+
+                <Route path="/"
+                    component={Main}/>
+                
+
+            </Switch>
+
+        </Router>
+
+    </React.StrictMode>
+</ThemeProvider>, document.getElementById('root'));
+
