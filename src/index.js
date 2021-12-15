@@ -3,11 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {createMuiTheme, ThemeProvider} from '@mui/material';
-
-// import './index.css';
-
-
-// import App from './App';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+//import './index.css';
+//import App from './App';
 
 import Main from './ui/Main.js';
 import VendorList from './vendor/VendorList';
@@ -61,4 +59,6 @@ ReactDOM.render (<ThemeProvider theme={theme}>
 
     </React.StrictMode>
 </ThemeProvider>, document.getElementById('root'));
+
+serviceWorkerRegistration.register();
 
