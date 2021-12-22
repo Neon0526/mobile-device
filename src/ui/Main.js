@@ -8,6 +8,9 @@ import { Box, Button } from '@mui/material';
 
 import AppMenu from './AppMenu';
 import ColorTabs from './ColorTabs';
+import SignUp from '../account/SignUp';
+import SignIn from '../account/SignIn';
+import SignOut from '../account/SignOut';
 
 
  
@@ -30,18 +33,20 @@ console.log(status)
 
     <AppMenu/>
     
-    {/* {status==="signUp"?
+     {status==="signUp"?
 
       <SignUp setStatus={setStatus}/>
 
       :status==="signIn"?
 
       <SignIn setStatus={setStatus}/>
+      
+      
 
       :
 
       <SignOut setStatus={setStatus}/>
-      } */}
+      } 
 
 
     <Button variant="contained" color="primary" onClick={()=>handleClick("/vendor")}>Vendor</Button>
