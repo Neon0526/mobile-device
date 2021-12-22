@@ -36,12 +36,18 @@ export default function VendorList() {
         async function readData() {
             setIsLoading(true);
             // const querySnapshot = await getDocs(collection(db, "product"));
-            const querySnapshot = await getDocs(query(collection(db, "V_test"), orderBy("location")));
+            const querySnapshot = await getDocs(query(collection(db, "Vender"), orderBy("location")));
             const temp = [];
             querySnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
                 temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
+<<<<<<< HEAD
             });
+=======
+                
+            });
+            
+>>>>>>> d6784f9472f76833d5a9c623fa12859760b054ab
             console.log(temp);
             setVendors([... temp]);
             setIsLoading(false);
