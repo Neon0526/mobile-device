@@ -4,11 +4,11 @@ import { getApps, initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { config } from '../settings/firebaseConfig';
 import { useHistory } from 'react-router';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 
 
 //import { Box } from '@mui/system';
-
 
 
 export default function SignIn(props) {
@@ -40,7 +40,7 @@ export default function SignIn(props) {
       if (res) {
         //console.log(auth.currentUser.displayName);
         props.setStatus("signedIn");
-        history.push("/VenderList");
+        history.push("/Vendor");
       }
       setMessage("");
 
@@ -57,10 +57,20 @@ export default function SignIn(props) {
 
 
   return (
-  
     
-    <Box textAlign='center'>
+    <Box textAlign='center' 
+    sx={{
+      position: 'absolute', left: '50%', top: '50%',
+      transform: 'translate(-50%, -50%)', 
+      width:'30%',
+      height:'50%',
+      backgroundColor: 'fourth.main',
+      opacity: [0.7, 0.9, 0.7],
+      border: '1px dashed grey',
+    }}>
     <form>
+      <br></br>
+      <AccountCircleIcon fontSize="large"/><br></br>
       <TextField type = "email" name = "email" value={account.email} 
         placeholder="電子郵件信箱" label="電子郵件信箱:" onChange={handleChange} autoComplete="email"/><br/>
       <TextField type = "password" name = "password" value={account.password}

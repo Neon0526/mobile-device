@@ -7,27 +7,32 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import './index.css';
 //import App from './App';
 
+import SignIn from './account/SignIn'
 import Main from './ui/Main.js';
 import VendorList from './vendor/VendorList';
 import Product from './product/Product';
+import SignOut from './account/SignOut'
 const theme = createMuiTheme({
 
     palette: {
 
         primary: {
 
-            main: '#f44336'
+            main: '#87CEEB'
 
         },
 
         secondary: {
 
-            main: '#F5B7B1'
+            main: '#FF6347'
 
         },
         third: {
             main: '#f47336'
-        }
+        },
+        fourth: {
+            main: '#F5F5DC'
+        },
 
     }
 
@@ -43,13 +48,16 @@ ReactDOM.render (<ThemeProvider theme={theme}>
 
             <Switch>
 
-                <Route path="/vendor"
+                <Route path="/Vendor"
                     component={VendorList}/>
 
                 <Route path="/Product"
                     component={Product}/>
+                
+                <Route path="/SignOut"
+                    component={SignOut}/>
 
-                <Route path="/"
+                <Route exact path="/"
                     component={Main}/>
                 
 
