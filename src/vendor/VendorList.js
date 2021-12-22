@@ -41,13 +41,7 @@ export default function VendorList() {
             querySnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
                 temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
-<<<<<<< HEAD
             });
-=======
-                
-            });
-            
->>>>>>> d6784f9472f76833d5a9c623fa12859760b054ab
             console.log(temp);
             setVendors([... temp]);
             setIsLoading(false);

@@ -12,6 +12,8 @@ import Main from './ui/Main.js';
 import VendorList from './vendor/VendorList';
 import Product from './product/Product';
 import SignOut from './account/SignOut'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 const theme = createMuiTheme({
 
     palette: {
@@ -45,9 +47,8 @@ ReactDOM.render (<ThemeProvider theme={theme}>
     <React.StrictMode>
 
         <Router>
-
+        <ToastContainer />
             <Switch>
-
                 <Route path="/Vendor"
                     component={VendorList}/>
 

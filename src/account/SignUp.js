@@ -1,18 +1,12 @@
 import React, {useState} from 'react';
-
-import {Button, TextField} from '@mui/material';
-
+import {Box,Button, TextField} from '@mui/material';
 import { getApps, initializeApp } from "firebase/app";
-
 import { getAuth, createUserWithEmailAndPassword,updateProfile } from "firebase/auth";
-
 import {config} from '../settings/firebaseConfig';
-
-
-
-//import { Box } from '@mui/system';
-
-
+import AddReactionIcon from '@mui/icons-material/AddReaction';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
+import { toast } from "react-toastify";
 
 export default function SignUp(props) {
 
@@ -47,17 +41,23 @@ export default function SignUp(props) {
         //console.log(res.user);
 
         await updateProfile(auth.currentUser,{displayName: account.displayName});
+        toast.success(
+          `Submit Successful`
+        );
 
       }
 
       setMessage("");
+      
 
 
 
     }
 
     catch(error){
-
+      toast.error(
+        `Submit Unsuccessful`
+      );
       setMessage(""+error);
 
     }
@@ -70,14 +70,21 @@ export default function SignUp(props) {
 
   }
 
-  
 
   return(
-
-    
-
+    <Box textAlign='center' 
+    sx={{
+      position: 'absolute', left: '50%', top: '50%',
+      transform: 'translate(-50%, -50%)', 
+      width:'30%',
+      height:'50%',
+      backgroundColor: 'fourth.main',
+      opacity: [0.7, 0.9, 0.7],
+      border: '1px dashed grey',
+    }}>
     <form>
-
+      <br></br>
+      <AddReactionIcon fontSize="large"/><br></br>
       <TextField type = "text" name = "displayName" value={account.displayName} 
 
         placeholder="姓名" label="姓名:" onChange={handleChange} /><br/>
@@ -97,6 +104,7 @@ export default function SignUp(props) {
       <Button variant="contained" color="secondary" onClick={changeStatus}>已經註冊，我要登入</Button>
 
     </form>
+    </Box>
 
     
 

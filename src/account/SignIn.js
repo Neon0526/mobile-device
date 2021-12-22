@@ -5,7 +5,9 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { config } from '../settings/firebaseConfig';
 import { useHistory } from 'react-router';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
+import { toast } from "react-toastify";
 
 
 //import { Box } from '@mui/system';
@@ -41,12 +43,19 @@ export default function SignIn(props) {
         //console.log(auth.currentUser.displayName);
         props.setStatus("signedIn");
         history.push("/Vendor");
+        toast.success(
+          `Login Successful`
+        );
       }
+      
       setMessage("");
 
     }
 
     catch (error) {
+      toast.error(
+        `Login Unsuccessful`
+      );
       setMessage("" + error);
     }
 
