@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {initializeApp} from "firebase/app";
-import {useHistory } from 'react-router';
+import {useHistory} from 'react-router';
 import {
     getFirestore,
     getDocs,
@@ -13,24 +13,43 @@ import {
 } from "firebase/firestore";
 import {config} from '../settings/firebaseConfig';
 import AppMenu from '../ui/AppMenu';
-import {Box, List, ListItem, ListItemText} from '@mui/material';
-export default function VendorList() {
+import {
+    Box,
+    List,
+    ListItem,
+    ListItemText,
+    Modal,
+    Button
+} from '@mui/material';
 
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4
+};
+
+export default function VendorList() {
+  
     const firebaseApp = initializeApp(config);
     const db = getFirestore();
-    // const getData = async function() {
-    // const querySnapshot = await getDocs(collection(db, "V_test"));
-    // querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    //console.log(doc.id, " => ", doc.data());
-    // });
-    // }
-    // getData();
-
+    const [test,setTest] = useState(NaN);
     const [open, setOpen] = React.useState(false);
+    const [cardVisible, setCardVisible] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const handleClose = () => {
+        setCardVisible(false);
+    };
+    
     const handleClickOpen = () => {
         setOpen(true);
     };
+    
     const [vendors, setVendors] = useState([]);
     useEffect(() => {
         async function readData() {
@@ -47,55 +66,72 @@ export default function VendorList() {
             setIsLoading(false);
         }
         readData();
-    }, [db, open]);
+    },[db, open]);
     
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    let history = useHistory();
+    
+    
     const handleListItemClick = (index) => {
-        
+     
         setSelectedIndex(index);
-        //console.log(vendors[index].id);
-        history.push("/Product",{id:vendors[index].id});
+        setCardVisible(true);
+        setTest(vendors[index].id);
         
     };
+
     const [isLoading, setIsLoading] = useState(false);
 
     const VendorListComponent = function () {
-        return (<List subheader="Vendor list" aria-label="vendor list"> {
-            vendors.map((vendor, index) => <ListItem divider
-                key={index}
-                selected={
-                    selectedIndex === index
-                }
-                onClick={
-                    () => handleListItemClick(index)
-            }>
-
-
-                <ListItemText primary={
-                        vendor.location
+        return (
+            <List subheader="Vendor list" aria-label="vendor list">
+                {
+                vendors.map((vendor, index) => <ListItem divider
+                    key={index}
+                    selected={
+                        selectedIndex === index
                     }
-                    secondary={
-                        "status:" + vendor.status
-                }></ListItemText>
-            </ListItem>)
-        } </List>)
+                    onClick={
+                        () => handleListItemClick(index)
+                        
+                }>
+                    
+
+
+                    <ListItemText primary={
+                            vendor.location
+                        }
+                        secondary={
+                            "status:" + vendor.status
+                    }></ListItemText>
+                </ListItem>)
+            } </List>
+        )
     }
 
+    return (
+        <Box sx={
+            {
+                width: '100vw',
+                height: '100vh',
+                backgroundColor: 'background.paper',
+                color: 'black',
+                textAlign: 'left'
+            }
+        }>
+            <AppMenu/>
+            <VendorListComponent/>
+            <div className="modal">
+                <Modal title="detail"
+                    open={cardVisible} onClose={handleClose}>
+                    <Box sx={modalStyle}>
+                        <h1>
+                            {test}
+                        </h1>
+                    </Box>
+                </Modal>
+            </div>
 
-    return (<Box 
-    sx={
-        {
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'background.paper',
-            color: 'black',
-            textAlign: 'left'
-        }
-
-    }>
-        <AppMenu/>
-        <VendorListComponent/>
-    </Box>);
+        </Box>
+    );
 
 }
+
