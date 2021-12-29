@@ -42,7 +42,6 @@ export default function VendorList() {
     const [open, setOpen] = React.useState(false);
     const [cardVisible, setCardVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    console.log("this");
     const handleClose = () => {
         setCardVisible(false);
     };

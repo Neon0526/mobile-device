@@ -58,7 +58,7 @@ ReactDOM.render (<ThemeProvider theme={theme}>
                 <Route path="/SignOut"
                     component={SignOut}/>
 
-                <Route exact path="/"
+                <Route path="/"
                     component={Main}/>
                 
 
