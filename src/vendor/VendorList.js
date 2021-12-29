@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import Product from '../product/Product'
 import {initializeApp} from "firebase/app";
 import {useHistory} from 'react-router';
 import {
@@ -31,14 +32,15 @@ const modalStyle = {
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
-    p: 4
+    p: 4,
+    //overflow:'scroll'
 };
 
 export default function VendorList() {
   
     const firebaseApp = initializeApp(config);
     const db = getFirestore();
-    const [test,setTest] = useState(NaN);
+    const [vendorId,setvendorId] = useState(NaN);
     const [open, setOpen] = React.useState(false);
     const [cardVisible, setCardVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -61,7 +63,7 @@ export default function VendorList() {
                 console.log(doc.id, " => ", doc.data());
                 temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
             });
-            console.log(temp);
+            // console.log(temp);
             setVendors([... temp]);
             setIsLoading(false);
         }
@@ -74,8 +76,7 @@ export default function VendorList() {
      
         setSelectedIndex(index);
         setCardVisible(true);
-        setTest(vendors[index].id);
-        
+        setvendorId(vendors[index].id);
     };
 
     const [isLoading, setIsLoading] = useState(false);
@@ -119,16 +120,17 @@ export default function VendorList() {
         }>
             <AppMenu/>
             <VendorListComponent/>
-            <div className="modal">
+            {/* <div className="modal">
                 <Modal title="detail"
                     open={cardVisible} onClose={handleClose}>
                     <Box sx={modalStyle}>
                         <h1>
-                            {test}
+                            {vendorId}
                         </h1>
                     </Box>
                 </Modal>
-            </div>
+            </div> */}
+            <Product vendorId={vendorId} setCardVisible={setCardVisible} cardVisible={cardVisible}/>
 
         </Box>
     );
