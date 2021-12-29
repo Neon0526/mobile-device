@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 
 import {Button} from '@mui/material';
-
+import {useHistory} from 'react-router';
 import { getApps, initializeApp } from "firebase/app";
 
 import { getAuth, signOut } from "firebase/auth";
 
 import {config} from '../settings/firebaseConfig';
 
+import SignIn from './SignIn';
 
 
 //import { Box } from '@mui/system';
@@ -52,14 +53,14 @@ export default function SignOut(props) {
 
     
 
-    <form>
+    //<form>
 
-      <Button variant="contained" color="primary" onClick={handleSubmit}>登出</Button>
+      //<Button variant="contained" color="primary" onClick={handleSubmit}>登出</Button>
 
-      {message}<br/>
+      //{message}<br/>
 
-    </form>
-
+    //</form>
+    handleSubmit
     
 
   )

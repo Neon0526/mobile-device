@@ -30,9 +30,6 @@ console.log(status)
       :
       <SignOut setStatus={setStatus}/>
       } 
-
-    
-
     {/* <ColorTabs/> */}
     </Box>
     
