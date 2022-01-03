@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Product from '../product/Product'
+import VendorAdd from './VendorAdd';
+import VendorDelete from './VendorDelete';
 import {initializeApp} from "firebase/app";
 import {useHistory} from 'react-router';
 import {
@@ -19,9 +21,11 @@ import {
     List,
     ListItem,
     ListItemText,
-    Modal,
+    Dialog,
     Button
 } from '@mui/material';
+import {IconButton} from '@mui/material';
+import {Delete as DeleteIcon} from '@mui/icons-material';
 
 const modalStyle = {
     position: 'absolute',
@@ -33,26 +37,27 @@ const modalStyle = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    //overflow:'scroll'
+    // overflow:'scroll'
 };
 
 export default function VendorList() {
-  
+
     const firebaseApp = initializeApp(config);
     const db = getFirestore();
-    const [vendorId,setvendorId] = useState(NaN);
+    const [vendorId, setvendorId] = useState(NaN);
     const [open, setOpen] = React.useState(false);
+    const [removeOpen, setRemoveOpen] = useState(false);
     const [cardVisible, setCardVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [vendors, setVendors] = useState([]);
     const handleClose = () => {
         setCardVisible(false);
     };
-    
+
     const handleClickOpen = () => {
         setOpen(true);
     };
-    
-    const [vendors, setVendors] = useState([]);
+
     useEffect(() => {
         async function readData() {
             setIsLoading(true);
@@ -68,20 +73,39 @@ export default function VendorList() {
             setIsLoading(false);
         }
         readData();
-    },[db, open]);
-    
-    
-    
+    }, [db, open]);
+
+
     const handleListItemClick = (index) => {
-     
         setSelectedIndex(index);
-        setCardVisible(true);
+        setCardVisible(true)
         setvendorId(vendors[index].id);
+
     };
+
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const insert = function (newVendor) {
+
+        setVendors(oldVendors => [
+            ...oldVendors,
+            newVendor
+        ]);
+        setOpen(false);
+
+    }
+    const remove = function () {
+        setCardVisible(false);
+        setRemoveOpen(true);
+        // setvendorId(vendors[index].id);
+        // e.stopPropogation()
+
+    }
+
+
     const VendorListComponent = function () {
+
         return (
             <List subheader="Vendor list" aria-label="vendor list">
                 {
@@ -89,20 +113,20 @@ export default function VendorList() {
                     key={index}
                     selected={
                         selectedIndex === index
-                    }
-                    onClick={
-                        () => handleListItemClick(index)
-                        
                 }>
-                    
-
 
                     <ListItemText primary={
                             vendor.location
                         }
                         secondary={
                             "status:" + vendor.status
+                        }
+                        onClick={
+                            () => handleListItemClick(index)
                     }></ListItemText>
+                    <DeleteIcon onClick={remove}></DeleteIcon>
+
+
                 </ListItem>)
             } </List>
         )
@@ -120,17 +144,15 @@ export default function VendorList() {
         }>
             <AppMenu/>
             <VendorListComponent/>
-            {/* <div className="modal">
-                <Modal title="detail"
-                    open={cardVisible} onClose={handleClose}>
-                    <Box sx={modalStyle}>
-                        <h1>
-                            {vendorId}
-                        </h1>
-                    </Box>
-                </Modal>
-            </div> */}
-            <Product vendorId={vendorId} setCardVisible={setCardVisible} cardVisible={cardVisible}/>
+            <Product vendorId={vendorId}
+                setCardVisible={setCardVisible}
+                cardVisible={cardVisible}/>
+            <VendorAdd open={open}
+                update={insert}
+                setOpen={setOpen}/>
+            <VendorDelete vendorId={vendorId}
+                open={removeOpen}
+                setOpen={setRemoveOpen}/>
 
         </Box>
     );
