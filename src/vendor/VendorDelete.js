@@ -34,7 +34,8 @@ export default function VendorDelete(props) {
     };
     const DeleteData = async () => {
         try{
-            console.log(props.vendorId);
+            console.log("2")
+            console.log(props);
         const docRef = await deleteDoc(doc(db, "Vender", props.vendorId));
         //console.log(props.vendorId)
         props.setOpen(false);

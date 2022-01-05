@@ -25,7 +25,7 @@ import {
     Button
 } from '@mui/material';
 import {IconButton} from '@mui/material';
-import {Delete as DeleteIcon} from '@mui/icons-material';
+import {Delete as DeleteIcon,Edit as EditIcon} from '@mui/icons-material';
 
 const modalStyle = {
     position: 'absolute',
@@ -45,11 +45,13 @@ export default function VendorList() {
     const firebaseApp = initializeApp(config);
     const db = getFirestore();
     const [vendorId, setvendorId] = useState(NaN);
+    const [removeVendorId,setRemoveVendorId] = useState(NaN);
     const [open, setOpen] = React.useState(false);
     const [removeOpen, setRemoveOpen] = useState(false);
     const [cardVisible, setCardVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [vendors, setVendors] = useState([]);
+    
     const handleClose = () => {
         setCardVisible(false);
     };
@@ -72,8 +74,9 @@ export default function VendorList() {
             setVendors([... temp]);
             setIsLoading(false);
         }
+        console.log(removeOpen);
         readData();
-    }, [db, open]);
+    }, [db, open,removeOpen]);
 
 
     const handleListItemClick = (index) => {
@@ -95,15 +98,12 @@ export default function VendorList() {
         setOpen(false);
 
     }
-    const remove = function () {
-        setCardVisible(false);
+    
+    function remove(index){
         setRemoveOpen(true);
-        // setvendorId(vendors[index].id);
-        // e.stopPropogation()
-
+        setRemoveVendorId(vendors[index].id);
+        
     }
-
-
     const VendorListComponent = function () {
 
         return (
@@ -111,6 +111,7 @@ export default function VendorList() {
                 {
                 vendors.map((vendor, index) => <ListItem divider
                     key={index}
+                    index={index}
                     selected={
                         selectedIndex === index
                 }>
@@ -124,8 +125,8 @@ export default function VendorList() {
                         onClick={
                             () => handleListItemClick(index)
                     }></ListItemText>
-                    <DeleteIcon onClick={remove}></DeleteIcon>
-
+                    <EditIcon></EditIcon>
+                    <DeleteIcon onClick={()=>remove(index)}></DeleteIcon>
 
                 </ListItem>)
             } </List>
@@ -150,9 +151,10 @@ export default function VendorList() {
             <VendorAdd open={open}
                 update={insert}
                 setOpen={setOpen}/>
-            <VendorDelete vendorId={vendorId}
+            <VendorDelete vendorId={removeVendorId}
                 open={removeOpen}
-                setOpen={setRemoveOpen}/>
+                setOpen={setRemoveOpen}
+                />
 
         </Box>
     );
