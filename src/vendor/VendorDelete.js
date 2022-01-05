@@ -59,8 +59,7 @@ export default function VendorDelete(props) {
                 確定要刪除嗎
 
                 <Button variant="contained" color="primary" onClick= {DeleteData}>確定</Button>
-                <Button variant="contained" color="secondary"
-                    onClick={handleClose}>取消</Button>
+                <Button variant="contained" color="secondary"onClick={handleClose}>取消</Button>
             </Dialog>
         </div>
     );

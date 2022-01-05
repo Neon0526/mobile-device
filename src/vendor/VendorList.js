@@ -26,6 +26,7 @@ import {
 } from '@mui/material';
 import {IconButton} from '@mui/material';
 import {Delete as DeleteIcon,Edit as EditIcon} from '@mui/icons-material';
+import VendorAddEdit from './VendorAddEdit';
 
 const modalStyle = {
     position: 'absolute',
@@ -48,9 +49,11 @@ export default function VendorList() {
     const [removeVendorId,setRemoveVendorId] = useState(NaN);
     const [open, setOpen] = React.useState(false);
     const [removeOpen, setRemoveOpen] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
     const [cardVisible, setCardVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [vendors, setVendors] = useState([]);
+    const [editVendor,setEditVendor] = useState(NaN);
     
     const handleClose = () => {
         setCardVisible(false);
@@ -74,9 +77,8 @@ export default function VendorList() {
             setVendors([... temp]);
             setIsLoading(false);
         }
-        console.log(removeOpen);
         readData();
-    }, [db, open,removeOpen]);
+    }, [db, open,removeOpen,editOpen]);
 
 
     const handleListItemClick = (index) => {
@@ -104,6 +106,12 @@ export default function VendorList() {
         setRemoveVendorId(vendors[index].id);
         
     }
+    function edit(index){
+        console.log("123");
+        setEditOpen(true);
+        console.log(editOpen);
+        setEditVendor(vendors[index]);
+    }
     const VendorListComponent = function () {
 
         return (
@@ -125,7 +133,7 @@ export default function VendorList() {
                         onClick={
                             () => handleListItemClick(index)
                     }></ListItemText>
-                    <EditIcon></EditIcon>
+                    <EditIcon onClick={()=>edit(index)}></EditIcon>
                     <DeleteIcon onClick={()=>remove(index)}></DeleteIcon>
 
                 </ListItem>)
@@ -155,6 +163,9 @@ export default function VendorList() {
                 open={removeOpen}
                 setOpen={setRemoveOpen}
                 />
+            <VendorAddEdit vendor={editVendor}
+                open={editOpen}
+                setOpen={setEditOpen}/>
 
         </Box>
     );
