@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { initializeApp } from "firebase/app";
 import { getFirestore, getDocs, collection, addDoc, query, orderBy} from "firebase/firestore";
 import {config} from '../settings/firebaseConfig';
-import { Dialog, Fab, DialogTitle,Input,Button } from '@mui/material';
+import { Dialog, Fab, DialogTitle,Input,Button, Select, MenuItem } from '@mui/material';
 import { Box } from '@mui/system';
 export default function VendorAdd(props){
     const firebaseApp = initializeApp(config);
@@ -34,6 +34,7 @@ export default function VendorAdd(props){
         setVendor({...vendor,[e.target.name]:e.target.value})
     
       }
+      
     const handleClickOpen = () => {
         props.setOpen(true);
       };
@@ -53,12 +54,23 @@ export default function VendorAdd(props){
     <Fab color="primary" aria-label="Add" onClick={handleClickOpen}>
         +
     </Fab>
-    <Dialog open={props.open} canaria-labelledby="新增機器" onClose={handleClose}>
+    <Dialog open={props.open} canaria-labelledby="新增機器" onClose={handleClose} style={{ midWidth: 120 }}>
     <DialogTitle>新增機器</DialogTitle>
 
     位置:<Input type="text" name="location" value={vendor.location} onChange={handleClick} /><br/>
+    狀態:<Select
+    labelId="demo-simple-select-label"
+    name="status"
+    id="demo-simple-select"
+    value={vendor.status}
+    label="status"
+    onChange={handleClick}
+  >
+    <MenuItem value={"red"}>故障中</MenuItem>
+    <MenuItem value={"green"}>正常</MenuItem>
+    <MenuItem value={"yellow"}>待補貨</MenuItem>
+  </Select><br/>
 
-    狀態:<Input type="text" name="status" value={vendor.status} onChange={handleClick}/><br/>
 
     <Button variant="contained" color="primary" onClick={update} >新增</Button>
     <Button variant="contained" color="secondary" onClick={handleClose}>取消</Button>

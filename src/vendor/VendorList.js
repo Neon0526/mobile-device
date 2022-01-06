@@ -4,6 +4,11 @@ import VendorAdd from './VendorAdd';
 import VendorDelete from './VendorDelete';
 import {initializeApp} from "firebase/app";
 import {useHistory} from 'react-router';
+import red from './red.png';
+import green from './green.png';
+import yellow from './yellow.png';
+import vm_icon from './vm_icon.png';
+import Image from 'material-ui-image';
 import {
     getFirestore,
     getDocs,
@@ -22,7 +27,8 @@ import {
     ListItem,
     ListItemText,
     Dialog,
-    Button
+    Button,
+    Avatar
 } from '@mui/material';
 import {IconButton} from '@mui/material';
 import {Delete as DeleteIcon,Edit as EditIcon} from '@mui/icons-material';
@@ -113,7 +119,6 @@ export default function VendorList() {
         setEditVendor(vendors[index]);
     }
     const VendorListComponent = function () {
-
         return (
             <List subheader="Vendor list" aria-label="vendor list">
                 {
@@ -123,18 +128,24 @@ export default function VendorList() {
                     selected={
                         selectedIndex === index
                 }>
+                    <Avatar src={vm_icon} sx={{ height: '50px', width: '50px' }}> </Avatar>
+                    {vendor.status === 'red' &&<Avatar src={red} sx={{ height: '20px', width: '20px' }}/>}
+                    {vendor.status === 'green' &&<Avatar src={green} sx={{ height: '20px', width: '20px' }}/>}
+                    {vendor.status === 'yellow' &&<Avatar src={yellow} sx={{ height: '20px', width: '20px' }}/>}
 
                     <ListItemText primary={
-                            vendor.location
+                            "販賣機位置:  "+vendor.location
                         }
-                        secondary={
-                            "status:" + vendor.status
-                        }
+                         
+                        
                         onClick={
                             () => handleListItemClick(index)
                     }></ListItemText>
+                    
                     <EditIcon onClick={()=>edit(index)}></EditIcon>
                     <DeleteIcon onClick={()=>remove(index)}></DeleteIcon>
+        
+                    
 
                 </ListItem>)
             } </List>

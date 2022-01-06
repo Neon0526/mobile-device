@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react';
 import { initializeApp } from "firebase/app";
 import { getFirestore, getDocs, collection, addDoc, query, orderBy, setDoc, doc} from "firebase/firestore";
 import {config} from '../settings/firebaseConfig';
-import { Dialog, Fab, DialogTitle,Input,Button, TextField, DialogContent, DialogActions } from '@mui/material';
+import { Dialog, Fab, DialogTitle,Input,Button, TextField, DialogContent, DialogActions, Select, MenuItem, InputLabel } from '@mui/material';
 import { Box } from '@mui/system';
 export default function VendorAddEdit(props){
     const firebaseApp = initializeApp(config);
@@ -57,7 +57,19 @@ export default function VendorAddEdit(props){
     
     <DialogContent>
         <TextField label ="地點" name="location" variant="outlined" value={vendor.location} onChange={handleChange}></TextField>
-        <TextField label ="狀態" name="status" variant="outlined" value={vendor.status} onChange={handleChange}></TextField>
+        <InputLabel>狀態:</InputLabel>
+        <Select
+    labelId="demo-simple-select-label"
+    name="status"
+    id="demo-simple-select"
+    value={vendor.status}
+    label="status"
+    onChange={handleChange}
+  >
+    <MenuItem value={"red"}>故障中</MenuItem>
+    <MenuItem value={"green"}>正常</MenuItem>
+    <MenuItem value={"yellow"}>待補貨</MenuItem>
+  </Select>
     </DialogContent>
     <DialogActions>
         <Button variant="contained" color="primary" onClick={update} >{action}</Button>
