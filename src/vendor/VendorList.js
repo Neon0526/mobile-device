@@ -1,7 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import Product from '../product/Product'
+import VendorAdd from './VendorAdd';
+import VendorDelete from './VendorDelete';
 import {initializeApp} from "firebase/app";
 import {useHistory} from 'react-router';
+import red from './red.png';
+import green from './green.png';
+import yellow from './yellow.png';
+import vm_icon from './vm_icon.png';
+import Image from 'material-ui-image';
 import {
     getFirestore,
     getDocs,
@@ -19,9 +26,13 @@ import {
     List,
     ListItem,
     ListItemText,
-    Modal,
-    Button
+    Dialog,
+    Button,
+    Avatar
 } from '@mui/material';
+import {IconButton} from '@mui/material';
+import {Delete as DeleteIcon,Edit as EditIcon} from '@mui/icons-material';
+import VendorAddEdit from './VendorAddEdit';
 
 const modalStyle = {
     position: 'absolute',
@@ -33,26 +44,31 @@ const modalStyle = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    //overflow:'scroll'
+    // overflow:'scroll'
 };
 
 export default function VendorList() {
-  
+
     const firebaseApp = initializeApp(config);
     const db = getFirestore();
-    const [vendorId,setvendorId] = useState(NaN);
+    const [vendorId, setvendorId] = useState(NaN);
+    const [removeVendorId,setRemoveVendorId] = useState(NaN);
     const [open, setOpen] = React.useState(false);
+    const [removeOpen, setRemoveOpen] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
     const [cardVisible, setCardVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [vendors, setVendors] = useState([]);
+    const [editVendor,setEditVendor] = useState(NaN);
+    
     const handleClose = () => {
         setCardVisible(false);
     };
-    
+
     const handleClickOpen = () => {
         setOpen(true);
     };
-    
-    const [vendors, setVendors] = useState([]);
+
     useEffect(() => {
         async function readData() {
             setIsLoading(true);
@@ -68,41 +84,69 @@ export default function VendorList() {
             setIsLoading(false);
         }
         readData();
-    },[db, open]);
-    
-    
-    
+    }, [db, open,removeOpen,editOpen]);
+
+
     const handleListItemClick = (index) => {
-     
         setSelectedIndex(index);
-        setCardVisible(true);
+        setCardVisible(true)
         setvendorId(vendors[index].id);
+
     };
+
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const insert = function (newVendor) {
+
+        setVendors(oldVendors => [
+            ...oldVendors,
+            newVendor
+        ]);
+        setOpen(false);
+
+    }
+    
+    function remove(index){
+        setRemoveOpen(true);
+        setRemoveVendorId(vendors[index].id);
+        
+    }
+    function edit(index){
+        console.log("123");
+        setEditOpen(true);
+        console.log(editOpen);
+        setEditVendor(vendors[index]);
+    }
     const VendorListComponent = function () {
         return (
             <List subheader="Vendor list" aria-label="vendor list">
                 {
                 vendors.map((vendor, index) => <ListItem divider
                     key={index}
+                    index={index}
                     selected={
                         selectedIndex === index
-                    }
-                    onClick={
-                        () => handleListItemClick(index)
-                        
                 }>
-                    
-
+                    <Avatar src={vm_icon} sx={{ height: '50px', width: '50px' }}> </Avatar>
+                    {vendor.status === 'red' &&<Avatar src={red} sx={{ height: '20px', width: '20px' }}/>}
+                    {vendor.status === 'green' &&<Avatar src={green} sx={{ height: '20px', width: '20px' }}/>}
+                    {vendor.status === 'yellow' &&<Avatar src={yellow} sx={{ height: '20px', width: '20px' }}/>}
 
                     <ListItemText primary={
-                            vendor.location
+                            "販賣機位置:  "+vendor.location
                         }
-                        secondary={
-                            "status:" + vendor.status
+                         
+                        
+                        onClick={
+                            () => handleListItemClick(index)
                     }></ListItemText>
+                    
+                    <EditIcon onClick={()=>edit(index)}></EditIcon>
+                    <DeleteIcon onClick={()=>remove(index)}></DeleteIcon>
+        
+                    
+
                 </ListItem>)
             } </List>
         )
@@ -120,17 +164,19 @@ export default function VendorList() {
         }>
             <AppMenu/>
             <VendorListComponent/>
-            {/* <div className="modal">
-                <Modal title="detail"
-                    open={cardVisible} onClose={handleClose}>
-                    <Box sx={modalStyle}>
-                        <h1>
-                            {vendorId}
-                        </h1>
-                    </Box>
-                </Modal>
-            </div> */}
-            <Product vendorId={vendorId} setCardVisible={setCardVisible} cardVisible={cardVisible}/>
+            <Product vendorId={vendorId}
+                setCardVisible={setCardVisible}
+                cardVisible={cardVisible}/>
+            <VendorAdd open={open}
+                update={insert}
+                setOpen={setOpen}/>
+            <VendorDelete vendorId={removeVendorId}
+                open={removeOpen}
+                setOpen={setRemoveOpen}
+                />
+            <VendorAddEdit vendor={editVendor}
+                open={editOpen}
+                setOpen={setEditOpen}/>
 
         </Box>
     );
