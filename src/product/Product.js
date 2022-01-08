@@ -2,12 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
     getFirestore,
     getDocs,
-    collection,
-    addDoc,
-    query,
-    orderBy,
-    onSnapshot,
-    doc
+    collection
 } from "firebase/firestore";
 import{
     Modal, 
@@ -15,15 +10,18 @@ import{
     List,
     ListItem,
     ListItemText,
+    Button,
 } from '@mui/material';
-import { concat } from 'async';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ProductAdd from './ProductAdd';
 export default function Product(props){
     const modalStyle = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: '90%',
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -31,6 +29,7 @@ export default function Product(props){
         overflow:'scroll'
     };
     const [products, setProduct]= useState([])
+    const [addVisible, setAddVisible] = useState(false);
     const db = getFirestore();
     useEffect(()=>{
         async function readCollection(){
@@ -41,12 +40,18 @@ export default function Product(props){
             });
             setProduct([...temp])
         }
+       
         readCollection();
-    },[props.vendorId])
-    console.log("array"+products)
+    },[db, props.vendorId])
+    
     const handleClose = () => {
         props.setCardVisible(false);
-    };
+    }
+    const handleAddClick = () => {
+        setAddVisible(true)
+    }
+
+    
     return (
     <div className="modal">
     <Modal title="detail"
@@ -63,8 +68,12 @@ export default function Product(props){
                         secondary={
                             "Quantity:" + product.Quantity
                     }></ListItemText>
+                  <EditIcon fontSize='medium' ></EditIcon> 
+                  <DeleteOutlineIcon fontSize='medium'></DeleteOutlineIcon>
                 </ListItem>)
             } </List>
+            <Button variant="contained" onClick={()=>handleAddClick()}>新增</Button>
+            <ProductAdd openAdd={addVisible} setVisible={setAddVisible} />
         </Box>
     </Modal>
     </div>
