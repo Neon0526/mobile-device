@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import {
     getFirestore,
     getDocs,
@@ -30,6 +31,8 @@ export default function Product(props){
         p: 4,
         overflow:'scroll'
     };
+    const history = useHistory();
+    const admin = history.location.state;
 
     const [products, setProduct]= useState([])
     const [addVisible, setAddVisible] = useState(false)
@@ -87,15 +90,15 @@ export default function Product(props){
                         secondary={
                             "Quantity:" + product.Quantity
                     }></ListItemText>
-                  <EditIcon onClick={()=>edit(index)} fontSize='medium' ></EditIcon> 
-                  <DeleteOutlineIcon onClick={()=>remove(index)} fontSize='medium'></DeleteOutlineIcon>
+                  {admin &&<EditIcon onClick={()=>edit(index)} fontSize='medium' ></EditIcon>}
+                  {admin &&<DeleteOutlineIcon onClick={()=>remove(index)} fontSize='medium'></DeleteOutlineIcon>}
 
                 </ListItem>)
             } </List>
-            <Button variant="contained" onClick={()=>handleAddClick()}>新增</Button>
-            <ProductAdd openAdd={addVisible} setAddVisible={setAddVisible} vendorId={props.vendorId}/>
-            <ProductDelete setOpen={setDeleteVisible} open={deleteVisible} ProductId={deleteProductId} vendorId={props.vendorId}/>
-            <ProductEdit setEditVisible={setEditVisible} openEdit={editVisible} Product={editProduct} ProductId={editProductId} vendorId={props.vendorId}/>
+            {admin &&<Button variant="contained" onClick={()=>handleAddClick()}>新增</Button>}
+            {admin &&<ProductAdd openAdd={addVisible} setAddVisible={setAddVisible} vendorId={props.vendorId}/>}
+            {admin &&<ProductDelete setOpen={setDeleteVisible} open={deleteVisible} ProductId={deleteProductId} vendorId={props.vendorId}/>}
+            {admin &&<ProductEdit setEditVisible={setEditVisible} openEdit={editVisible} Product={editProduct} ProductId={editProductId} vendorId={props.vendorId}/>}
         </Box>
     </Modal>
     </div>

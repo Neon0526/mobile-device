@@ -74,7 +74,6 @@ export default function SignIn(props) {
     }
 
   }
-  console.log(admin)
   const changeStatus = function () {
     props.setStatus("signUp");
   }

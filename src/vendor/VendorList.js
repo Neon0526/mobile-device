@@ -49,6 +49,11 @@ const modalStyle = {
 
 export default function VendorList() {
 
+    const history = useHistory();
+    const admin = history.location.state;
+    console.log(admin)
+
+
     const firebaseApp = initializeApp(config);
     const db = getFirestore();
     const [vendorId, setvendorId] = useState(NaN);
@@ -140,9 +145,9 @@ export default function VendorList() {
                             () => handleListItemClick(index)
                     }></ListItemText>
                     
-                    <EditIcon onClick={()=>edit(index)}></EditIcon>
+                    {admin &&<EditIcon onClick={()=>edit(index)}></EditIcon>}
 
-                    <DeleteIcon onClick={()=>remove(index)}></DeleteIcon>
+                    {admin &&<DeleteIcon onClick={()=>remove(index)}></DeleteIcon>}
         
                     
 
@@ -166,16 +171,16 @@ export default function VendorList() {
             <Product vendorId={vendorId}
                 setCardVisible={setCardVisible}
                 cardVisible={cardVisible}/>
-            <VendorAdd open={open}
+            {admin &&<VendorAdd open={open}
                 update={insert}
-                setOpen={setOpen}/>
-            <VendorDelete vendorId={removeVendorId}
+                setOpen={setOpen}/>}
+            {admin &&<VendorDelete vendorId={removeVendorId}
                 open={removeOpen}
                 setOpen={setRemoveOpen}
-                />
-            <VendorAddEdit vendor={editVendor}
+                />}
+            {admin &&<VendorAddEdit vendor={editVendor}
                 open={editOpen}
-                setOpen={setEditOpen}/>
+                setOpen={setEditOpen}/>}
 
         </Box>
     );
