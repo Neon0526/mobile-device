@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {
     getFirestore,
+    setDoc,
+    doc,
     getDocs,
     collection
 } from "firebase/firestore";
@@ -11,6 +13,7 @@ import{
     ListItem,
     ListItemText,
     Button,
+    Typography,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -41,14 +44,14 @@ export default function Product(props){
     const db = getFirestore();
     useEffect(()=>{
         async function readCollection(){
-            const Snapshot = await getDocs(collection(db, "Vender/"+props.vendorId+"/Item"));
+            const Snapshot = await getDocs(collection(db, "Vender/"+props.vendorId+"/Item"))
             const temp = []
-            Snapshot.forEach((doc)=>{
+            Snapshot.forEach((doc)=>{   
                 temp.push({id:doc.id,Name:doc.data().Name,Quantity:doc.data().Quantity})
             });
             setProduct([...temp])
         }
-       
+
         readCollection();
     },[db, props.vendorId, addVisible, editVisible, deleteVisible])
     
@@ -81,12 +84,21 @@ export default function Product(props){
                     key={index}
                     index={index}
                     >                    
-                    <ListItemText primary={
+                    {product.Quantity < 10 &&<ListItemText primary={ 
+                            product.Name}
+                        
+                        secondary={<Typography variant="subtitle2" color="#FF0000">Quantity:{product.Quantity}</Typography> 
+                        }>
+                       
+                    </ListItemText>}
+                    {product.Quantity >= 10 &&<ListItemText primary={
                             product.Name
                         }
                         secondary={
-                            "Quantity:" + product.Quantity
-                    }></ListItemText>
+                            <Typography variant="subtitle2" color="textSecondary">Quantity:{product.Quantity}</Typography>
+                    }>
+                       
+                    </ListItemText>}
                   <EditIcon onClick={()=>edit(index)} fontSize='medium' ></EditIcon> 
                   <DeleteOutlineIcon onClick={()=>remove(index)} fontSize='medium'></DeleteOutlineIcon>
 
