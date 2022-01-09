@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {
     getFirestore,
-    getDocs,
-    collection
+    addDoc,
+    collection,
+    CollectionReference
 } from "firebase/firestore";
 import{
     Modal, 
@@ -10,7 +11,8 @@ import{
     List,
     ListItem,
     ListItemText,
-    Typography
+    Typography,
+    Button
 } from '@mui/material';
 import TextField from '@mui/material/TextField';
 export default function ProductAdd(props){
@@ -27,22 +29,40 @@ export default function ProductAdd(props){
         '& .MuiTextField-root': { m: 1, width: '25ch' },
     };
     const db = getFirestore();
-    // useEffect(()=>{
-    //     async function readCollection(){
-    //         const Snapshot = await getDocs(collection(db, "Vender/"+props.vendorId+"/Item"));
-    //         const temp = []
-    //         Snapshot.forEach((doc)=>{
-    //             temp.push({Name:doc.data().Name,Quantity:doc.data().Quantity})
-    //         });
-    //         setProduct([...temp])
-    //     }
-       
-    //     readCollection();
-    // },[db, props.vendorId])
+    const [product, setproduct] = useState({Name:"", Quantity:""})
+    const addProduct = async () => {
+        try{
     
+        const docRef = await addDoc(collection(db,"Vender/"+props.vendorId+"/Item"),{
+    
+          Name:product.Name,
+    
+          Quantity:product.Quantity
+    
+          });
+
+    
+      }
+    
+      catch(e){
+    
+        console.log(e);
+    
+      }};
     const handleClose = () => {
-        props.setVisible(false);
-    };
+        props.setAddVisible(false);
+    }
+    const handleClick = function(e){
+
+        setproduct({...product,[e.target.name]:e.target.value})
+    
+      }
+
+    const add = function(){
+        addProduct();
+        props.setAddVisible(false);
+    
+      }
     return (
     <div className="modal">
     <Modal title="detail"
@@ -52,9 +72,10 @@ export default function ProductAdd(props){
                 新增商品
             </Typography>
             <div>
-            <TextField id="Add_Name" variant="filled" label="Product Name" />
-            <TextField id="Add_Quantiy" variant="filled"  label="Quantity" type="number" />   
-            </div>    
+            <TextField name="Name" value={product.Name} variant="filled" label="Product Name" onChange={handleClick} />
+            <TextField name="Quantity" value={product.Quantity} variant="filled"  label="Quantity" type="number" InputProps={{ inputProps: { min: 0 } }} onChange={handleClick}/>   
+            </div>
+            <Button variant="contained" color="primary" onClick={add} >新增</Button>  
         </Box>
     </Modal>
     </div>

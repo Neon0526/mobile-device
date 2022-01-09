@@ -15,6 +15,8 @@ import{
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ProductAdd from './ProductAdd';
+import ProductDelete from './ProductDelete'
+import ProductEdit from './ProductEdit'
 export default function Product(props){
     const modalStyle = {
         position: 'absolute',
@@ -28,21 +30,27 @@ export default function Product(props){
         p: 4,
         overflow:'scroll'
     };
+
     const [products, setProduct]= useState([])
-    const [addVisible, setAddVisible] = useState(false);
+    const [addVisible, setAddVisible] = useState(false)
+    const [editVisible, setEditVisible] = useState(false)
+    const [editProduct,setEditProduct] = useState(NaN);
+    const [deleteVisible, setDeleteVisible] = useState(false)
+    const [deleteProductId,setDeleteProductId] = useState(NaN);
+    const [editProductId, setEditProductId] = useState(NaN);
     const db = getFirestore();
     useEffect(()=>{
         async function readCollection(){
             const Snapshot = await getDocs(collection(db, "Vender/"+props.vendorId+"/Item"));
             const temp = []
             Snapshot.forEach((doc)=>{
-                temp.push({Name:doc.data().Name,Quantity:doc.data().Quantity})
+                temp.push({id:doc.id,Name:doc.data().Name,Quantity:doc.data().Quantity})
             });
             setProduct([...temp])
         }
        
         readCollection();
-    },[db, props.vendorId])
+    },[db, props.vendorId, addVisible, editVisible, deleteVisible])
     
     const handleClose = () => {
         props.setCardVisible(false);
@@ -50,7 +58,17 @@ export default function Product(props){
     const handleAddClick = () => {
         setAddVisible(true)
     }
-
+    function edit(index){
+        setEditVisible(true);
+        setEditProduct(products[index]);
+        setEditProductId(products[index].id)
+        
+    }
+    function remove(index){
+        setDeleteVisible(true);
+        setDeleteProductId(products[index].id);
+        console.log(products[index].id)
+    }
     
     return (
     <div className="modal">
@@ -61,6 +79,7 @@ export default function Product(props){
                 {
                 products.map((product, index) => <ListItem divider
                     key={index}
+                    index={index}
                     >                    
                     <ListItemText primary={
                             product.Name
@@ -68,12 +87,15 @@ export default function Product(props){
                         secondary={
                             "Quantity:" + product.Quantity
                     }></ListItemText>
-                  <EditIcon fontSize='medium' ></EditIcon> 
-                  <DeleteOutlineIcon fontSize='medium'></DeleteOutlineIcon>
+                  <EditIcon onClick={()=>edit(index)} fontSize='medium' ></EditIcon> 
+                  <DeleteOutlineIcon onClick={()=>remove(index)} fontSize='medium'></DeleteOutlineIcon>
+
                 </ListItem>)
             } </List>
             <Button variant="contained" onClick={()=>handleAddClick()}>新增</Button>
-            <ProductAdd openAdd={addVisible} setVisible={setAddVisible} />
+            <ProductAdd openAdd={addVisible} setAddVisible={setAddVisible} vendorId={props.vendorId}/>
+            <ProductDelete setOpen={setDeleteVisible} open={deleteVisible} ProductId={deleteProductId} vendorId={props.vendorId}/>
+            <ProductEdit setEditVisible={setEditVisible} openEdit={editVisible} Product={editProduct} ProductId={editProductId} vendorId={props.vendorId}/>
         </Box>
     </Modal>
     </div>

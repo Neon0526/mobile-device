@@ -113,9 +113,7 @@ export default function VendorList() {
         
     }
     function edit(index){
-        console.log("123");
         setEditOpen(true);
-        console.log(editOpen);
         setEditVendor(vendors[index]);
     }
     const VendorListComponent = function () {
@@ -143,6 +141,7 @@ export default function VendorList() {
                     }></ListItemText>
                     
                     <EditIcon onClick={()=>edit(index)}></EditIcon>
+
                     <DeleteIcon onClick={()=>remove(index)}></DeleteIcon>
         
                     
