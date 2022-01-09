@@ -2,7 +2,7 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import {createMuiTheme, ThemeProvider} from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import './index.css';
 //import App from './App';
@@ -14,7 +14,7 @@ import Product from './product/Product';
 import SignOut from './account/SignOut'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
-const theme = createMuiTheme({
+const theme = createTheme({
 
     palette: {
 
