@@ -31,8 +31,9 @@ import {
     Avatar
 } from '@mui/material';
 import {IconButton} from '@mui/material';
-import {Delete as DeleteIcon,Edit as EditIcon} from '@mui/icons-material';
+import {Delete as DeleteIcon,Edit as EditIcon, Message} from '@mui/icons-material';
 import VendorAddEdit from './VendorAddEdit';
+import { toast } from 'react-toastify';
 
 const modalStyle = {
     position: 'absolute',
@@ -48,6 +49,11 @@ const modalStyle = {
 };
 
 export default function VendorList() {
+
+    const history = useHistory();
+    const admin = history.location.state;
+    
+
 
     const firebaseApp = initializeApp(config);
     const db = getFirestore();
@@ -77,6 +83,7 @@ export default function VendorList() {
             const temp = [];
             querySnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
+                //const Snapshot = await getDocs(collection(db, "Vender/"+doc.id+"/Item"));
                 temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
             });
             // console.log(temp);
@@ -89,7 +96,12 @@ export default function VendorList() {
 
     const handleListItemClick = (index) => {
         setSelectedIndex(index);
-        setCardVisible(true)
+        if(admin || vendors[index].status != "red"){
+            setCardVisible(true)
+        }else{
+            toast.error("故障中")
+        }
+        
         setvendorId(vendors[index].id);
 
     };
@@ -140,9 +152,9 @@ export default function VendorList() {
                             () => handleListItemClick(index)
                     }></ListItemText>
                     
-                    <EditIcon onClick={()=>edit(index)}></EditIcon>
+                    {admin &&<EditIcon onClick={()=>edit(index)}></EditIcon>}
 
-                    <DeleteIcon onClick={()=>remove(index)}></DeleteIcon>
+                    {admin &&<DeleteIcon onClick={()=>remove(index)}></DeleteIcon>}
         
                     
 
@@ -166,16 +178,16 @@ export default function VendorList() {
             <Product vendorId={vendorId}
                 setCardVisible={setCardVisible}
                 cardVisible={cardVisible}/>
-            <VendorAdd open={open}
+            {admin &&<VendorAdd open={open}
                 update={insert}
-                setOpen={setOpen}/>
-            <VendorDelete vendorId={removeVendorId}
+                setOpen={setOpen}/>}
+            {admin &&<VendorDelete vendorId={removeVendorId}
                 open={removeOpen}
                 setOpen={setRemoveOpen}
-                />
-            <VendorAddEdit vendor={editVendor}
+                />}
+            {admin &&<VendorAddEdit vendor={editVendor}
                 open={editOpen}
-                setOpen={setEditOpen}/>
+                setOpen={setEditOpen}/>}
 
         </Box>
     );

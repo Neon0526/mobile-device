@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, TextField,Box } from '@mui/material';
 import { getApps, initializeApp } from "firebase/app";
+import { getFirestore, getDoc, collection, addDoc, query, orderBy,doc} from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { config } from '../settings/firebaseConfig';
 import { useHistory } from 'react-router';
@@ -15,6 +16,11 @@ import { toast } from "react-toastify";
 
 export default function SignIn(props) {
 
+  const firebaseApp = initializeApp(config);
+  const db = getFirestore();
+  
+
+
   if (getApps().length === 0) {
 
     initializeApp(config);
@@ -24,12 +30,16 @@ export default function SignIn(props) {
   const [account, setAccount] = useState({ email: "", password: "", displayName: "" });
 
   const [message, setMessage] = useState("");
+  
 
   const handleChange = function (e) {
 
     setAccount({ ...account, [e.target.name]: e.target.value })
 
   }
+
+  
+
 
   const history = useHistory();
 
@@ -41,8 +51,12 @@ export default function SignIn(props) {
       //console.log(res);
       if (res) {
         //console.log(auth.currentUser.displayName);
+        const docRef = doc(db, "User",account.email);
+        const docSnap = await getDoc(docRef);
+        
+        console.log(docSnap.data().admin)
         props.setStatus("signedIn");
-        history.push("/Vendor");
+        history.push("/Vendor",docSnap.data().admin);
         toast.success(
           `Login Successful`
         );

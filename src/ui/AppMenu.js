@@ -45,7 +45,7 @@ export default function AppMenu() {
         </div>
         <div className='right'>
         {/*<Button component={NavLink} to='/SignOut' activeStyle={activeStyle} color="inherit">SignOut</Button>*/}
-        <Button variant="contained" color="primary" onClick={handleSubmit}>登出</Button>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>登入</Button>
         {/*<Button variant="contained" color="primary" onClick={handleSubmit}>登出</Button>*/}
         </div>
 
