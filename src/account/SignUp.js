@@ -7,6 +7,7 @@ import AddReactionIcon from '@mui/icons-material/AddReaction';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import { toast } from "react-toastify";
+import { doc, getFirestore, setDoc ,addDoc,collection} from 'firebase/firestore';
 
 export default function SignUp(props) {
 
@@ -15,6 +16,8 @@ export default function SignUp(props) {
     initializeApp(config);
 
   }
+  const db = getFirestore();
+
 
   const [account, setAccount] = useState({email:"",password:"", displayName:""});
 
@@ -34,13 +37,18 @@ export default function SignUp(props) {
 
       const res = await createUserWithEmailAndPassword(auth, account.email, account.password);
 
-      //console.log(res);
+
+      console.log(account.email);
 
       if (res) {
 
         //console.log(res.user);
 
         await updateProfile(auth.currentUser,{displayName: account.displayName});
+        await setDoc(doc(db,"User",account.email),{
+          
+          admin: false
+          });
         toast.success(
           `Submit Successful`
         );
