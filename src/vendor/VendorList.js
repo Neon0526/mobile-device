@@ -31,8 +31,9 @@ import {
     Avatar
 } from '@mui/material';
 import {IconButton} from '@mui/material';
-import {Delete as DeleteIcon,Edit as EditIcon} from '@mui/icons-material';
+import {Delete as DeleteIcon,Edit as EditIcon, Message} from '@mui/icons-material';
 import VendorAddEdit from './VendorAddEdit';
+import { toast } from 'react-toastify';
 
 const modalStyle = {
     position: 'absolute',
@@ -51,7 +52,7 @@ export default function VendorList() {
 
     const history = useHistory();
     const admin = history.location.state;
-    console.log(admin)
+    
 
 
     const firebaseApp = initializeApp(config);
@@ -82,6 +83,7 @@ export default function VendorList() {
             const temp = [];
             querySnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
+                //const Snapshot = await getDocs(collection(db, "Vender/"+doc.id+"/Item"));
                 temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
             });
             // console.log(temp);
@@ -94,7 +96,12 @@ export default function VendorList() {
 
     const handleListItemClick = (index) => {
         setSelectedIndex(index);
-        setCardVisible(true)
+        if(admin || vendors[index].status != "red"){
+            setCardVisible(true)
+        }else{
+            toast.error("故障中")
+        }
+        
         setvendorId(vendors[index].id);
 
     };
