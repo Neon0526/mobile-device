@@ -42,11 +42,11 @@ export default function AppMenu() {
 
       <Toolbar>
         <div className='left'>
-        <Button component={NavLink} to='/' activeStyle={activeStyle} color="inherit">Vendor</Button>
+        <Button component={NavLink} to='/Vendor' activeStyle={activeStyle} color="inherit">Vendor</Button>
         </div>
         <div className='right'>
         {/*<Button component={NavLink} to='/SignOut' activeStyle={activeStyle} color="inherit">SignOut</Button>*/}
-        <Button variant="contained" color="primary" onClick={handleSubmit}>登入</Button>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>登出</Button>
         {/*<Button variant="contained" color="primary" onClick={handleSubmit}>登出</Button>*/}
         </div>
 

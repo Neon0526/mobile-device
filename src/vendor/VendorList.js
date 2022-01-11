@@ -85,7 +85,7 @@ export default function VendorList() {
             setIsLoading(true);
             // const querySnapshot = await getDocs(collection(db, "product"))
             const querySnapshot = await getDocs(query(collection(db, "Vender"), where("status","==",state)));
-            const Snapshot = await getDocs(collection(db, "Vender"))
+            const allSnapshot = await getDocs(query(collection(db, "Vender"), orderBy("location")))
             const temp = [];
             if(state!=="all"){
                 querySnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
@@ -95,7 +95,7 @@ export default function VendorList() {
                 });
             }
             else{
-                Snapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
+                allSnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
                     //const Snapshot = await getDocs(collection(db, "Vender/"+doc.id+"/Item"));
                     temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
