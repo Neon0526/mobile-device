@@ -1,19 +1,23 @@
 {
   "files": {
-    "main.js": "/mobile-device/static/js/main.efca03d6.chunk.js",
-    "main.js.map": "/mobile-device/static/js/main.efca03d6.chunk.js.map",
+    "main.js": "/mobile-device/static/js/main.3748a773.chunk.js",
+    "main.js.map": "/mobile-device/static/js/main.3748a773.chunk.js.map",
     "runtime-main.js": "/mobile-device/static/js/runtime-main.8e766cd1.js",
     "runtime-main.js.map": "/mobile-device/static/js/runtime-main.8e766cd1.js.map",
-    "static/js/2.57ec8746.chunk.js": "/mobile-device/static/js/2.57ec8746.chunk.js",
-    "static/js/2.57ec8746.chunk.js.map": "/mobile-device/static/js/2.57ec8746.chunk.js.map",
+    "static/css/2.58a45539.chunk.css": "/mobile-device/static/css/2.58a45539.chunk.css",
+    "static/js/2.bbbf6235.chunk.js": "/mobile-device/static/js/2.bbbf6235.chunk.js",
+    "static/js/2.bbbf6235.chunk.js.map": "/mobile-device/static/js/2.bbbf6235.chunk.js.map",
     "index.html": "/mobile-device/index.html",
     "service-worker.js": "/mobile-device/service-worker.js",
     "service-worker.js.map": "/mobile-device/service-worker.js.map",
-    "static/js/2.57ec8746.chunk.js.LICENSE.txt": "/mobile-device/static/js/2.57ec8746.chunk.js.LICENSE.txt"
+    "static/css/2.58a45539.chunk.css.map": "/mobile-device/static/css/2.58a45539.chunk.css.map",
+    "static/js/2.bbbf6235.chunk.js.LICENSE.txt": "/mobile-device/static/js/2.bbbf6235.chunk.js.LICENSE.txt",
+    "static/media/vm_icon.45ef2e02.png": "/mobile-device/static/media/vm_icon.45ef2e02.png"
   },
   "entrypoints": [
     "static/js/runtime-main.8e766cd1.js",
-    "static/js/2.57ec8746.chunk.js",
-    "static/js/main.efca03d6.chunk.js"
+    "static/css/2.58a45539.chunk.css",
+    "static/js/2.bbbf6235.chunk.js",
+    "static/js/main.3748a773.chunk.js"
   ]
 }
