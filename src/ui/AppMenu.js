@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {NavLink} from 'react-router-dom';
-import { AppBar, Button, Toolbar } from '@mui/material';
+import { AppBar, Button, Toolbar} from '@mui/material';
 import SignIn from '../account/SignIn';
 import { getAuth, signOut } from "firebase/auth";
 import {useHistory} from 'react-router';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import { toast } from "react-toastify";
+
 
 export default function AppMenu() {
 
@@ -32,12 +33,12 @@ export default function AppMenu() {
       setMessage(""+error);
 
     }
-
   }
 
+  
   return (
-
-    <AppBar position="sticky">
+  
+    <AppBar position="sticky" >
 
       <Toolbar>
         <div className='left'>
@@ -51,9 +52,13 @@ export default function AppMenu() {
 
         {/* <Button component={NavLink} to='/employee' activeStyle={activeStyle} color="inherit">employee</Button>
         <Button component={NavLink} to='/department' activeStyle={activeStyle} color="inherit">department</Button> */}
+ 
+        
+        
       </Toolbar>
-
+      
     </AppBar>
+    
 
   )
 

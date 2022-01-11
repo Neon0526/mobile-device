@@ -16,6 +16,7 @@ import {
     addDoc,
     query,
     orderBy,
+    where,
     onSnapshot,
     doc
 } from "firebase/firestore";
@@ -28,7 +29,11 @@ import {
     ListItemText,
     Dialog,
     Button,
-    Avatar
+    Avatar,
+    FormControl,
+    Select,
+    InputLabel,
+    MenuItem
 } from '@mui/material';
 import {IconButton} from '@mui/material';
 import {Delete as DeleteIcon,Edit as EditIcon, Message} from '@mui/icons-material';
@@ -66,7 +71,7 @@ export default function VendorList() {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [vendors, setVendors] = useState([]);
     const [editVendor,setEditVendor] = useState(NaN);
-    
+    const [state, setState] = useState("all")
     const handleClose = () => {
         setCardVisible(false);
     };
@@ -78,25 +83,36 @@ export default function VendorList() {
     useEffect(() => {
         async function readData() {
             setIsLoading(true);
-            // const querySnapshot = await getDocs(collection(db, "product"));
-            const querySnapshot = await getDocs(query(collection(db, "Vender"), orderBy("location")));
+            // const querySnapshot = await getDocs(collection(db, "product"))
+            const querySnapshot = await getDocs(query(collection(db, "Vender"), where("status","==",state)));
+            const Snapshot = await getDocs(collection(db, "Vender"))
             const temp = [];
-            querySnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
-                //const Snapshot = await getDocs(collection(db, "Vender/"+doc.id+"/Item"));
-                temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
-            });
+            if(state!=="all"){
+                querySnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    //const Snapshot = await getDocs(collection(db, "Vender/"+doc.id+"/Item"));
+                    temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
+                });
+            }
+            else{
+                Snapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    //const Snapshot = await getDocs(collection(db, "Vender/"+doc.id+"/Item"));
+                    temp.push({id: doc.id, location: doc.data().location, status: doc.data().status});
+                });
+            }
+            
             // console.log(temp);
-            setVendors([... temp]);
+            setVendors([...temp]);
             setIsLoading(false);
         }
         readData();
-    }, [db, open,removeOpen,editOpen]);
+    }, [db, open,removeOpen,editOpen,state]);
 
 
     const handleListItemClick = (index) => {
         setSelectedIndex(index);
-        if(admin || vendors[index].status != "red"){
+        if(admin || vendors[index].status !== "red"){
             setCardVisible(true)
         }else{
             toast.error("故障中")
@@ -128,6 +144,9 @@ export default function VendorList() {
         setEditOpen(true);
         setEditVendor(vendors[index]);
     }
+    const handleChange = (event) => {
+        setState(event.target.value);
+      }
     const VendorListComponent = function () {
         return (
             <List subheader="Vendor list" aria-label="vendor list">
@@ -174,6 +193,23 @@ export default function VendorList() {
             }
         }>
             <AppMenu/>
+            <FormControl sx={{m:2,minWidth:120, textAlign:'center'}}> 
+        <InputLabel id="demo-simple-select-label">狀態查詢</InputLabel>
+        <Select 
+          variant = "standard" 
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={state}
+          onChange={handleChange}
+          label="Age"
+        >
+          <MenuItem value="all">全部</MenuItem>
+          <MenuItem value="green">正常</MenuItem>
+          <MenuItem value="yellow">待補貨</MenuItem>
+          <MenuItem value="red">故障中</MenuItem>
+        </Select>
+        
+      </FormControl>
             <VendorListComponent/>
             <Product vendorId={vendorId}
                 setCardVisible={setCardVisible}
